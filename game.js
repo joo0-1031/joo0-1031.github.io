@@ -32,6 +32,7 @@
   let food;
   let enemies;
   let characters;
+  let effects;
   let score = 0;
   let timer = null;
   let running = false;
@@ -72,7 +73,8 @@
     queuedDirection = 'right';
     score = 0;
     enemies = [];
-    characters = [{ x: 4, y: 4, icon: '🐶', label: '강아지', points: 25, color: '#d98954' }, { x: 19, y: 18, icon: '👶', label: '아기', points: 50, color: '#e8b8a7' }];
+    characters = [{ x: 4, y: 4, icon: '🐶', label: '강아지', points: 50, color: '#d98954' }, { x: 19, y: 18, icon: '👶', label: '아기', points: 100, color: '#e8b8a7' }];
+    effects = [];
     placeFood();
     enemies = [createEnemy(), createEnemy()];
     updateScore();
@@ -102,6 +104,10 @@
 
   function setFeedback(message) {
     feedbackElement.textContent = message;
+  }
+
+  function addPopEffect(cell, character) {
+    effects.push({ x: cell.x, y: cell.y, text: `뿅! +${character.points}`, color: character.color, life: 14 });
   }
 
   function start() {
@@ -182,10 +188,11 @@
       setFeedback('사과를 먹었어요! +10점 · 지렁이가 한 칸 자랐습니다.');
     } else if (eatenCharacter) {
       score += eatenCharacter.points;
+      addPopEffect(head, eatenCharacter);
       const nextPosition = openCell(eatenCharacter);
       eatenCharacter.x = nextPosition.x;
       eatenCharacter.y = nextPosition.y;
-      setFeedback(`${eatenCharacter.icon} ${eatenCharacter.label}을(를) 만났어요! +${eatenCharacter.points}점 · 보너스 성장!`);
+      setFeedback(`${eatenCharacter.icon} ${eatenCharacter.label}을(를) 먹었어요! +${eatenCharacter.points}점 · 크게 성장!`);
     } else {
       snake.pop();
     }
@@ -193,6 +200,7 @@
     updateEnemyCount();
     updateScore();
     moveEnemies();
+    effects = effects.map((effect) => ({ ...effect, y: effect.y - 0.08, life: effect.life - 1 })).filter((effect) => effect.life > 0);
     if (enemies.some((enemy) => sameCell(enemy, snake[0]))) { gameOver(); return; }
     draw();
   }
@@ -222,6 +230,26 @@
     snake.forEach((part, index) => drawCell(part, index === 0 ? '#1c2b2a' : '#55776b', 8));
     drawCell(snake[0], '#1c2b2a', 8);
     ctx.fillStyle = '#f5f3ee'; ctx.beginPath(); ctx.arc(snake[0].x * cellSize + cellSize * .38, snake[0].y * cellSize + cellSize * .38, 2, 0, Math.PI * 2); ctx.arc(snake[0].x * cellSize + cellSize * .62, snake[0].y * cellSize + cellSize * .38, 2, 0, Math.PI * 2); ctx.fill();
+    effects.forEach(drawPopEffect);
+  }
+
+  function drawPopEffect(effect) {
+    const x = effect.x * cellSize + cellSize / 2;
+    const y = effect.y * cellSize + cellSize / 2;
+    const alpha = Math.min(1, effect.life / 6);
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.strokeStyle = effect.color;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(x, y, cellSize * (1.1 - effect.life / 35), 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.fillStyle = '#8b3f35';
+    ctx.font = `700 ${cellSize * .52}px Arial, sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(effect.text, x, y - cellSize * .72);
+    ctx.restore();
   }
 
   function drawEnemy(enemy) {
