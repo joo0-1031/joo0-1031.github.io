@@ -16,6 +16,8 @@
   const scoreElement = document.querySelector('#score');
   const bestScoreElement = document.querySelector('#best-score');
   const statusElement = document.querySelector('#game-status');
+  const enemyCountElement = document.querySelector('#enemy-count');
+  const feedbackElement = document.querySelector('#game-feedback');
   const overlay = document.querySelector('#game-overlay');
   const overlayTitle = document.querySelector('#overlay-title');
   const overlayMessage = document.querySelector('#overlay-message');
@@ -37,7 +39,15 @@
 
   const randomCell = () => ({ x: Math.floor(Math.random() * gridSize), y: Math.floor(Math.random() * gridSize) });
   const sameCell = (a, b) => a.x === b.x && a.y === b.y;
-  const isBlocked = (cell) => snake.some((part) => sameCell(part, cell)) || enemies.some((enemy) => sameCell(enemy, cell));
+  const isBlocked = (cell, ignoredCharacter = null) => snake.some((part) => sameCell(part, cell))
+    || enemies.some((enemy) => sameCell(enemy, cell))
+    || characters.some((character) => character !== ignoredCharacter && sameCell(character, cell));
+
+  function openCell(ignoredCharacter = null) {
+    let candidate = randomCell();
+    while (isBlocked(candidate, ignoredCharacter) || sameCell(candidate, food)) candidate = randomCell();
+    return candidate;
+  }
 
   function getBestScore() {
     try { return Number(localStorage.getItem(bestKey)) || 0; } catch { return 0; }
@@ -48,14 +58,11 @@
   }
 
   function placeFood() {
-    let candidate = randomCell();
-    while (isBlocked(candidate)) candidate = randomCell();
-    food = candidate;
+    food = openCell();
   }
 
   function createEnemy() {
-    let candidate = randomCell();
-    while (isBlocked(candidate) || sameCell(candidate, food)) candidate = randomCell();
+    const candidate = openCell();
     return { ...candidate, direction: Object.keys(directions)[Math.floor(Math.random() * 4)] };
   }
 
@@ -65,9 +72,12 @@
     queuedDirection = 'right';
     score = 0;
     enemies = [];
-    characters = [{ x: 4, y: 4, icon: '🐶', color: '#d98954' }, { x: 19, y: 18, icon: '👶', color: '#e8b8a7' }];
+    characters = [{ x: 4, y: 4, icon: '🐶', label: '강아지', points: 25, color: '#d98954' }, { x: 19, y: 18, icon: '👶', label: '아기', points: 50, color: '#e8b8a7' }];
     placeFood();
+    enemies = [createEnemy(), createEnemy()];
     updateScore();
+    updateEnemyCount();
+    setFeedback('빨간 뿔 얼굴은 적이에요. 강아지와 아기를 먹으면 보너스 점수와 함께 자랍니다.');
     draw();
   }
 
@@ -84,6 +94,14 @@
 
   function setStatus(value) {
     statusElement.textContent = value;
+  }
+
+  function updateEnemyCount() {
+    enemyCountElement.textContent = `적 ${enemies.length}`;
+  }
+
+  function setFeedback(message) {
+    feedbackElement.textContent = message;
   }
 
   function start() {
@@ -156,7 +174,24 @@
     const hitEnemy = enemies.some((enemy) => sameCell(enemy, head));
     if (hitWall || hitSelf || hitEnemy) { gameOver(); return; }
     snake.unshift(head);
-    if (sameCell(head, food)) { score += 10; if (score % 50 === 0 && enemies.length < 4) enemies.push(createEnemy()); placeFood(); updateScore(); } else { snake.pop(); }
+    const eatenCharacter = characters.find((character) => sameCell(character, head));
+    const ateFood = sameCell(head, food);
+    if (ateFood) {
+      score += 10;
+      placeFood();
+      setFeedback('사과를 먹었어요! +10점 · 지렁이가 한 칸 자랐습니다.');
+    } else if (eatenCharacter) {
+      score += eatenCharacter.points;
+      const nextPosition = openCell(eatenCharacter);
+      eatenCharacter.x = nextPosition.x;
+      eatenCharacter.y = nextPosition.y;
+      setFeedback(`${eatenCharacter.icon} ${eatenCharacter.label}을(를) 만났어요! +${eatenCharacter.points}점 · 보너스 성장!`);
+    } else {
+      snake.pop();
+    }
+    if (score >= 50 && enemies.length < 4 && score % 50 < 10) enemies.push(createEnemy());
+    updateEnemyCount();
+    updateScore();
     moveEnemies();
     if (enemies.some((enemy) => sameCell(enemy, snake[0]))) { gameOver(); return; }
     draw();
@@ -177,7 +212,11 @@
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.strokeStyle = 'rgba(28,43,42,.06)';
     for (let i = 1; i < gridSize; i += 1) { const position = i * cellSize; ctx.beginPath(); ctx.moveTo(position, 0); ctx.lineTo(position, canvas.height); ctx.moveTo(0, position); ctx.lineTo(canvas.width, position); ctx.stroke(); }
-    characters.forEach((character) => { drawCell(character, character.color, 8); ctx.font = `${cellSize * .72}px serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(character.icon, character.x * cellSize + cellSize / 2, character.y * cellSize + cellSize / 2 + 1); });
+    characters.forEach((character) => {
+      drawCell(character, character.color, 8);
+      ctx.strokeStyle = '#fffdf9'; ctx.lineWidth = 2; ctx.strokeRect(character.x * cellSize + 3, character.y * cellSize + 3, cellSize - 6, cellSize - 6);
+      ctx.font = `${cellSize * .72}px serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(character.icon, character.x * cellSize + cellSize / 2, character.y * cellSize + cellSize / 2 + 1);
+    });
     drawCell(food, '#d94f3d', 10);
     enemies.forEach(drawEnemy);
     snake.forEach((part, index) => drawCell(part, index === 0 ? '#1c2b2a' : '#55776b', 8));
@@ -188,6 +227,7 @@
   function drawEnemy(enemy) {
     const x = enemy.x * cellSize;
     const y = enemy.y * cellSize;
+    ctx.strokeStyle = '#8f3028'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(x + cellSize / 2, y + cellSize / 2, cellSize * .48, 0, Math.PI * 2); ctx.stroke();
     drawCell(enemy, '#e26d5a', 8);
     ctx.fillStyle = '#f8f4eb';
     ctx.beginPath();
@@ -196,7 +236,7 @@
     ctx.fillStyle = '#1c2b2a';
     ctx.beginPath();
     ctx.arc(x + cellSize * .35, y + cellSize * .42, 2, 0, Math.PI * 2); ctx.arc(x + cellSize * .65, y + cellSize * .42, 2, 0, Math.PI * 2); ctx.fill();
-    ctx.strokeStyle = '#1c2b2a'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(x + cellSize * .36, y + cellSize * .68); ctx.quadraticCurveTo(x + cellSize * .5, y + cellSize * .8, x + cellSize * .64, y + cellSize * .68); ctx.stroke();
+    ctx.strokeStyle = '#1c2b2a'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(x + cellSize * .28, y + cellSize * .28); ctx.lineTo(x + cellSize * .42, y + cellSize * .34); ctx.moveTo(x + cellSize * .58, y + cellSize * .34); ctx.lineTo(x + cellSize * .72, y + cellSize * .28); ctx.moveTo(x + cellSize * .36, y + cellSize * .68); ctx.quadraticCurveTo(x + cellSize * .5, y + cellSize * .8, x + cellSize * .64, y + cellSize * .68); ctx.stroke();
   }
 
   document.addEventListener('keydown', (event) => {

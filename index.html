@@ -72,9 +72,10 @@
       <section class="games-section" id="games" aria-labelledby="games-title">
         <div class="section-heading"><div><p class="eyebrow">05 / Playground</p><h2 id="games-title">Games</h2></div><p class="section-note">잠깐 쉬어가는<br>작은 놀이터</p></div>
         <div class="game-shell">
-          <div class="game-topline"><span>WORM RUN</span><span id="game-status" role="status">READY</span></div>
+          <div class="game-topline"><span>WORM RUN</span><span><span id="enemy-count">적 2</span> · <span id="game-status" role="status">READY</span></span></div>
           <div class="game-scoreline"><span>Score <strong id="score">0</strong></span><span>Best <strong id="best-score">0</strong></span></div>
           <div class="game-board-wrap"><canvas id="game-canvas" width="480" height="480" aria-label="지렁이 게임 보드"></canvas><div class="game-overlay" id="game-overlay"><strong id="overlay-title">지렁이 게임</strong><span id="overlay-message">시작 버튼을 눌러 게임을 시작하세요.</span></div></div>
+          <p class="game-feedback" id="game-feedback" role="status" aria-live="polite">빨간 뿔 얼굴은 적이에요. 강아지와 아기를 먹으면 보너스 점수와 함께 자랍니다.</p>
           <div class="game-actions"><button class="primary-button" id="start-button" type="button">시작</button><button class="secondary-button" id="pause-button" type="button" disabled>일시정지</button><button class="secondary-button" id="restart-button" type="button">재시작</button></div>
           <div class="touch-controls" aria-label="모바일 방향 조작"><button type="button" data-direction="up" aria-label="위로 이동">↑</button><div><button type="button" data-direction="left" aria-label="왼쪽으로 이동">←</button><button type="button" data-direction="down" aria-label="아래로 이동">↓</button><button type="button" data-direction="right" aria-label="오른쪽으로 이동">→</button></div></div>
           <p class="game-help">방향키 또는 WASD로 이동 · 스페이스로 일시정지 · 모바일은 버튼을 사용하세요.</p>
