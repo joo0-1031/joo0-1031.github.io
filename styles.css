@@ -26,6 +26,9 @@ h3 { margin-bottom:8px; font-size:1.25rem; }
 .split-section.compact { align-items:start; }
 .section-copy { max-width:600px; color:var(--muted); font-size:1.05rem; line-height:1.8; }
 .section-copy strong { color:var(--accent); }
+.study-illustration { margin:0 0 32px; overflow:hidden; background:#e8e1d7; }
+.study-illustration img { display:block; width:100%; aspect-ratio:3 / 2; object-fit:cover; }
+.study-illustration figcaption { padding:10px 14px 12px; color:var(--muted); font-size:.68rem; letter-spacing:.12em; text-transform:uppercase; }
 .fact-list { margin-top:42px; border-top:1px solid var(--line); }
 .fact-list div, .timeline-row { display:grid; grid-template-columns:1fr 2fr; gap:20px; padding:16px 0; border-bottom:1px solid var(--line); font-size:.8rem; line-height:1.3; }
 .fact-list span, .timeline-row span { color:var(--accent); }

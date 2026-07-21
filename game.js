@@ -179,10 +179,24 @@
     for (let i = 1; i < gridSize; i += 1) { const position = i * cellSize; ctx.beginPath(); ctx.moveTo(position, 0); ctx.lineTo(position, canvas.height); ctx.moveTo(0, position); ctx.lineTo(canvas.width, position); ctx.stroke(); }
     characters.forEach((character) => { drawCell(character, character.color, 8); ctx.font = `${cellSize * .72}px serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(character.icon, character.x * cellSize + cellSize / 2, character.y * cellSize + cellSize / 2 + 1); });
     drawCell(food, '#d94f3d', 10);
-    enemies.forEach((enemy) => drawCell(enemy, '#637e72', 8));
+    enemies.forEach(drawEnemy);
     snake.forEach((part, index) => drawCell(part, index === 0 ? '#1c2b2a' : '#55776b', 8));
     drawCell(snake[0], '#1c2b2a', 8);
     ctx.fillStyle = '#f5f3ee'; ctx.beginPath(); ctx.arc(snake[0].x * cellSize + cellSize * .38, snake[0].y * cellSize + cellSize * .38, 2, 0, Math.PI * 2); ctx.arc(snake[0].x * cellSize + cellSize * .62, snake[0].y * cellSize + cellSize * .38, 2, 0, Math.PI * 2); ctx.fill();
+  }
+
+  function drawEnemy(enemy) {
+    const x = enemy.x * cellSize;
+    const y = enemy.y * cellSize;
+    drawCell(enemy, '#e26d5a', 8);
+    ctx.fillStyle = '#f8f4eb';
+    ctx.beginPath();
+    ctx.moveTo(x + cellSize * .2, y + 4); ctx.lineTo(x + cellSize * .32, y - 1); ctx.lineTo(x + cellSize * .44, y + 4);
+    ctx.moveTo(x + cellSize * .56, y + 4); ctx.lineTo(x + cellSize * .68, y - 1); ctx.lineTo(x + cellSize * .8, y + 4); ctx.fill();
+    ctx.fillStyle = '#1c2b2a';
+    ctx.beginPath();
+    ctx.arc(x + cellSize * .35, y + cellSize * .42, 2, 0, Math.PI * 2); ctx.arc(x + cellSize * .65, y + cellSize * .42, 2, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = '#1c2b2a'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(x + cellSize * .36, y + cellSize * .68); ctx.quadraticCurveTo(x + cellSize * .5, y + cellSize * .8, x + cellSize * .64, y + cellSize * .68); ctx.stroke();
   }
 
   document.addEventListener('keydown', (event) => {
