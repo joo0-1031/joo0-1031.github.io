@@ -3,55 +3,86 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="교육을 좋아하는 개발자 개인 프로페셔널 웹사이트">
-    <title>프로필 | 교육 좋아하는 개발자</title>
+    <meta name="description" content="교육을 좋아하는 개발자의 개인 프로페셔널 웹사이트">
+    <title>JOO | 교육 좋아하는 개발자</title>
+    <link rel="icon" href="data:,">
     <link rel="stylesheet" href="styles.css">
     <script src="script.js" defer></script>
+    <script src="game.js" defer></script>
   </head>
   <body>
     <header class="site-header">
-      <a class="brand" href="#top" aria-label="홈으로 이동">JOO<span>.</span></a>
-      <nav aria-label="주요 메뉴">
-        <a href="#profile">Profile</a>
-        <a href="#work">Work</a>
+      <a class="brand" href="#home" aria-label="홈으로 이동">JOO<span>.</span></a>
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#experience">Experience</a>
+        <a href="#research">Research</a>
         <a href="#games">Games</a>
+        <a href="#contact">Contact</a>
       </nav>
     </header>
 
-    <main id="top">
-      <section class="hero" id="profile" aria-labelledby="hero-title">
+    <main>
+      <section class="hero" id="home" aria-labelledby="hero-title">
         <p class="eyebrow">Personal profile / 2026</p>
         <h1 id="hero-title">교육 좋아하는<br><em>개발자</em></h1>
         <p class="intro">디지털 경험을 설계하고 만드는 사람의 작업 기록입니다.</p>
-        <p class="pending">이름·사진·상세 경력은 <strong>[비공개]</strong></p>
+        <a class="text-link" href="#about">프로필 살펴보기 <span aria-hidden="true">↘</span></a>
       </section>
 
-      <section class="content-grid" id="work" aria-labelledby="work-title">
+      <section class="split-section" id="about" aria-labelledby="about-title">
         <div>
-          <p class="eyebrow">Selected direction</p>
-          <h2 id="work-title">작업과 관심사</h2>
+          <p class="eyebrow">01 / About</p>
+          <h2 id="about-title">배우고,<br>만들고,<br>나눕니다.</h2>
         </div>
-        <p class="body-copy">프로필 자료가 확인되면 프로젝트, 기술, 경력과 연락처를 이 영역에 추가합니다.</p>
-      </section>
-
-      <section class="games-section" id="games" aria-labelledby="games-title">
-        <div class="section-heading">
-          <p class="eyebrow">Playground</p>
-          <h2 id="games-title">Games</h2>
-        </div>
-        <div class="game-placeholder" role="status">
-          <span class="game-mark" aria-hidden="true">+</span>
-          <div>
-            <h3>지렁이 게임 준비 중</h3>
-            <p>키보드와 모바일 터치로 즐기는 작은 게임이 곧 추가됩니다.</p>
+        <div class="section-copy">
+          <p>사람이 더 쉽게 이해하고 오래 기억할 수 있는 경험에 관심이 있습니다. 프로필과 상세 경력은 <strong>[비공개]</strong>입니다.</p>
+          <div class="fact-list" aria-label="프로필 요약">
+            <div><span>Focus</span><strong>Web / Interaction</strong></div>
+            <div><span>Based</span><strong>[비공개]</strong></div>
+            <div><span>Open to</span><strong>Learning together</strong></div>
           </div>
         </div>
       </section>
+
+      <section class="work-section" id="projects" aria-labelledby="projects-title">
+        <div class="section-heading">
+          <div><p class="eyebrow">02 / Selected work</p><h2 id="projects-title">Projects</h2></div>
+          <p class="section-note">확인된 프로젝트 정보가<br>추가될 예정입니다.</p>
+        </div>
+        <div class="work-list">
+          <article class="work-item"><span>01</span><h3>[비공개] 프로젝트</h3><p>프로젝트 설명은 확인 후 공개합니다.</p><b aria-hidden="true">↗</b></article>
+          <article class="work-item"><span>02</span><h3>Learning playground</h3><p>배움과 실험을 위한 작은 웹 경험.</p><b aria-hidden="true">↗</b></article>
+          <article class="work-item"><span>03</span><h3>Next idea</h3><p>새로운 아이디어를 준비 중입니다.</p><b aria-hidden="true">↗</b></article>
+        </div>
+      </section>
+
+      <section class="split-section compact" id="experience" aria-labelledby="experience-title">
+        <div><p class="eyebrow">03 / Experience</p><h2 id="experience-title">Experience</h2></div>
+        <div class="section-copy"><p>경력과 역할에 대한 자세한 내용은 <strong>[비공개]</strong>입니다.</p><div class="timeline-row"><span>01</span><strong>Professional experience</strong><em>[비공개]</em></div><div class="timeline-row"><span>02</span><strong>Education &amp; mentoring</strong><em>[비공개]</em></div></div>
+      </section>
+
+      <section class="work-section research-section" id="research" aria-labelledby="research-title">
+        <div class="section-heading"><div><p class="eyebrow">04 / Notes</p><h2 id="research-title">Research</h2></div><p class="section-note">관찰하고 질문한<br>것들을 기록합니다.</p></div>
+        <div class="research-grid"><article><span>01 / Note</span><h3>배움이 경험이 되는 순간</h3><p>교육과 기술이 만나는 지점을 탐구 중입니다.</p></article><article><span>02 / Note</span><h3>작은 인터랙션의 힘</h3><p>사용자의 다음 행동을 돕는 화면을 생각합니다.</p></article></div>
+      </section>
+
+      <section class="games-section" id="games" aria-labelledby="games-title">
+        <div class="section-heading"><div><p class="eyebrow">05 / Playground</p><h2 id="games-title">Games</h2></div><p class="section-note">잠깐 쉬어가는<br>작은 놀이터</p></div>
+        <div class="game-shell">
+          <div class="game-topline"><span>WORM RUN</span><span id="game-status" role="status">READY</span></div>
+          <div class="game-scoreline"><span>Score <strong id="score">0</strong></span><span>Best <strong id="best-score">0</strong></span></div>
+          <div class="game-board-wrap"><canvas id="game-canvas" width="480" height="480" aria-label="지렁이 게임 보드"></canvas><div class="game-overlay" id="game-overlay"><strong id="overlay-title">지렁이 게임</strong><span id="overlay-message">시작 버튼을 눌러 게임을 시작하세요.</span></div></div>
+          <div class="game-actions"><button class="primary-button" id="start-button" type="button">시작</button><button class="secondary-button" id="pause-button" type="button" disabled>일시정지</button><button class="secondary-button" id="restart-button" type="button">재시작</button></div>
+          <div class="touch-controls" aria-label="모바일 방향 조작"><button type="button" data-direction="up" aria-label="위로 이동">↑</button><div><button type="button" data-direction="left" aria-label="왼쪽으로 이동">←</button><button type="button" data-direction="down" aria-label="아래로 이동">↓</button><button type="button" data-direction="right" aria-label="오른쪽으로 이동">→</button></div></div>
+          <p class="game-help">방향키 또는 WASD로 이동 · 스페이스로 일시정지 · 모바일은 버튼을 사용하세요.</p>
+        </div>
+      </section>
+
+      <section class="contact-section" id="contact" aria-labelledby="contact-title"><p class="eyebrow">06 / Contact</p><h2 id="contact-title">함께 배우고<br><em>만들어요.</em></h2><p class="section-copy">연락처와 외부 링크는 <strong>[비공개]</strong>입니다.</p></section>
     </main>
 
-    <footer class="site-footer">
-      <span>© 2026 JOO</span>
-      <span>Built with HTML, CSS &amp; JavaScript</span>
-    </footer>
+    <footer class="site-footer"><span>© 2026 JOO</span><span>Built with HTML, CSS &amp; JavaScript</span></footer>
   </body>
 </html>
