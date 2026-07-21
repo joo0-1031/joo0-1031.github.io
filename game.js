@@ -46,7 +46,7 @@
 
   function openCell(ignoredCharacter = null) {
     let candidate = randomCell();
-    while (isBlocked(candidate, ignoredCharacter) || sameCell(candidate, food)) candidate = randomCell();
+    while (isBlocked(candidate, ignoredCharacter) || (food && sameCell(candidate, food))) candidate = randomCell();
     return candidate;
   }
 
